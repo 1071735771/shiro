@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true">
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/flowweb%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger %msg%n</pattern>
+            <charset>GBK</charset>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="INFO"></logger>
+    <!--<logger name="org.springframework.jdbc.core.JdbcTemplate" level="DEBUG"/>-->
+    <logger name="com.ideal.template" level="INFO"></logger>
+    <logger name="org.hibernate.SQL" level="DEBUG"></logger>
+    <!--<logger name="jdbc.sqlonly" level="DEBUG"></logger>-->
+    <logger name="jdbc.sqltiming" level="DEBUG"></logger>
+    <logger name="jdbc.audit" level="OFF"></logger>
+    <logger name="jdbc.resultset" level="OFF"></logger>
+    <logger name="jdbc.resultsettable" level="OFF"></logger>
+    <logger name="jdbc.connection" level="ERROR"></logger>
+
+    <root level="WARN">
+        <!-- 设置接收所有输出的通道 -->
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </root>
+
+</configuration>

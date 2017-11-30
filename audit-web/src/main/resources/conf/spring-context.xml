@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
+       default-lazy-init="true">
+
+    <context:annotation-config />
+    <!-- 定时任务  多线程设置    wucy -->
+    <task:executor id="executor" pool-size="15" />
+    <task:scheduler id="scheduler" pool-size="20" />
+    <task:annotation-driven executor="executor" scheduler="scheduler" />
+    <!-- 配置 JSR303 Bean Validator 定义 -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+    <!-- Spring Data Jpa配置 -->
+    <jpa:repositories base-package="com.ideal.audit" factory-class="com.ideal.audit.common.dao.jpa.FrameworkJpaRepositoryFactoryBean"/>
+
+    <!--service层配置 -->
+    <context:component-scan base-package="com.ideal.audit"></context:component-scan>
+
+    <!-- 全局参数设置，用来初始化Global对象 -->
+    <bean id="Global" class="com.ideal.audit.common.global.Global" init-method="init"/>
+
+    <!--<bean id="Timing" class="com.ideal.audit.warning.service.TimingTaskSchedule" init-method="init"/>-->
+
+
+    <!--<bean id="SendMonitor" class="com.ideal.audit.warning.SendMonitor" init-method="init"/>-->
+
+    <task:scheduled-tasks>
+        <task:scheduled ref="quartzTestBean" method="dojob" cron="0/10 0 0 * * ?"/>
+    </task:scheduled-tasks>
+
+    <bean id="quartzTestBean" class="com.ideal.audit.warning.service.job"/>
+
+</beans>
